@@ -1,0 +1,10 @@
+SELECT 
+    e1.id, 
+    e1.date, 
+    e1.salary, 
+    (SELECT SUM(e2.salary) 
+     FROM Employee e2
+     WHERE e2.id = e1.id AND e2.date BETWEEN e1.date - INTERVAL '3' MONTH AND e1.date - INTERVAL '1' MONTH) AS cum_sum
+FROM Employee e1
+WHERE e1.date < (SELECT MAX(date) FROM Employee)
+ORDER BY e1.id ASC, e1.date DESC;
