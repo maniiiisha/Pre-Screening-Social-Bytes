@@ -1,0 +1,9 @@
+SELECT Company, AVG(Salary) as MedianSalary
+FROM (
+    SELECT Company, Salary,
+    ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary) as RowAsc,
+    ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary DESC) as RowDesc
+    FROM Employee
+) as SubQuery
+WHERE RowAsc IN (RowDesc, RowDesc - 1, RowDesc + 1)
+GROUP BY Company;
